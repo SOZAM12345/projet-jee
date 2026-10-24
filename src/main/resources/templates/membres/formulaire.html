@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Membre')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container mt-4" style="max-width: 650px;">
+    <h2 class="fw-bold mb-4" th:text="${membre.id == null} ? '➕ Ajouter un membre' : '✏️ Modifier le membre'"></h2>
+
+    <div class="card p-4">
+        <form th:action="@{/membres/enregistrer}" th:object="${membre}" method="post" enctype="multipart/form-data">
+
+            <input type="hidden" th:field="*{id}"/>
+
+            <div class="mb-3" th:if="${membre.cheminPhoto != null}">
+                <img th:src="@{'/uploads/photos/' + ${membre.cheminPhoto}}"
+                     style="width:80px;height:80px;object-fit:cover;border-radius:50%;"/>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Photo</label>
+                <input type="file" class="form-control" name="photo" accept="image/*"/>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Nom</label>
+                <input type="text" class="form-control" th:field="*{nom}" required/>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Prénom</label>
+                <input type="text" class="form-control" th:field="*{prenom}" required/>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input type="email" class="form-control" th:field="*{email}" required/>
+            </div>
+
+            <div class="mb-3" th:if="${membre.id == null}">
+                <label class="form-label">Mot de passe</label>
+                <input type="password" class="form-control" th:field="*{motDePasse}" required/>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Statut</label>
+                <select class="form-select" th:field="*{statut}">
+                    <option value="PERMANENT">Permanent</option>
+                    <option value="ASSOCIE">Associé</option>
+                    <option value="DOCTORANT">Doctorant</option>
+                    <option value="RETRAITE">Retraité</option>
+                    <option value="ANCIEN">Ancien</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Établissement d'origine</label>
+                <input type="text" class="form-control" th:field="*{etablissementOrigine}"/>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Laboratoire d'origine</label>
+                <input type="text" class="form-control" th:field="*{laboratoireOrigine}"/>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Biographie</label>
+                <textarea class="form-control" rows="3" th:field="*{biographie}"></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Centres d'intérêt</label>
+                <textarea class="form-control" rows="2" th:field="*{centresInteret}"></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Date de naissance <span class="text-muted small">(confidentielle)</span></label>
+                <input type="date" class="form-control" th:field="*{dateNaissance}"/>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Date d'embauche</label>
+                <input type="date" class="form-control" th:field="*{dateEmbauche}"/>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Date d'affiliation</label>
+                <input type="date" class="form-control" th:field="*{dateAffiliation}"/>
+            </div>
+
+            <!-- Section 3 : Équipe actuelle -->
+            <div class="mb-4">
+                <label class="form-label">Équipe</label>
+                <select name="equipeId" class="form-select">
+                    <option value="">— Aucune équipe —</option>
+                    <option th:each="e : ${equipes}"
+                            th:value="${e.id}"
+                            th:text="${e.nom}"
+                            th:selected="${membre.equipe != null and membre.equipe.id == e.id}"></option>
+                </select>
+            </div>
+
+            <div class="d-flex justify-content-between">
+                <a href="/membres" class="btn btn-outline-secondary">← Annuler</a>
+                <button type="submit" class="btn btn-primary px-4">
+                    <i class="fa-solid fa-floppy-disk"></i> Enregistrer
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

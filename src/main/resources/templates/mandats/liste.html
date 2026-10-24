@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Mandats')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: navbar}"></header>
+
+<main class="container">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
+        <div>
+            <p class="eyebrow">Gouvernance</p>
+            <h1 class="serif" style="font-size:2rem;">Mandats de gouvernance</h1>
+        </div>
+        <a href="/mandats/ajouter" class="btn-brass">+ Ajouter un mandat</a>
+    </div>
+
+    <section class="panel" style="margin-bottom:2rem;">
+        <p class="section-title">Direction du laboratoire</p>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Rôle</th>
+                <th>Membre</th>
+                <th>Date début</th>
+                <th>Date fin</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="mandat : ${mandatsGouvernance}">
+                <td><span class="tag tag-ink" th:text="${mandat.typeRole}"></span></td>
+                <td th:text="${mandat.membre.prenom} + ' ' + ${mandat.membre.nom}"></td>
+                <td th:text="${mandat.dateDebut}"></td>
+                <td>
+                    <span class="tag tag-teal" th:if="${mandat.dateFin == null}">En cours</span>
+                    <span th:if="${mandat.dateFin != null}" th:text="${mandat.dateFin}"></span>
+                </td>
+                <td>
+                    <form th:if="${mandat.dateFin == null}" th:action="@{'/mandats/cloturer/' + ${mandat.id}}" method="post">
+                        <button type="submit" class="btn-outline-ink btn-sm">🏳 Clôturer</button>
+                    </form>
+                </td>
+            </tr>
+            <tr th:if="${mandatsGouvernance.isEmpty()}">
+                <td colspan="5" style="text-align:center; color:var(--ink-faint);">Aucun mandat de direction enregistré.</td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section class="panel">
+        <p class="section-title">Responsabilités d'équipe</p>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Rôle</th>
+                <th>Membre</th>
+                <th>Équipe</th>
+                <th>Date début</th>
+                <th>Date fin</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="mandat : ${mandatsEquipe}">
+                <td><span class="tag tag-ink" th:text="${mandat.typeRole}"></span></td>
+                <td th:text="${mandat.membre.prenom} + ' ' + ${mandat.membre.nom}"></td>
+                <td th:text="${mandat.equipe != null} ? ${mandat.equipe.nom} : '—'"></td>
+                <td th:text="${mandat.dateDebut}"></td>
+                <td>
+                    <span class="tag tag-teal" th:if="${mandat.dateFin == null}">En cours</span>
+                    <span th:if="${mandat.dateFin != null}" th:text="${mandat.dateFin}"></span>
+                </td>
+                <td>
+                    <form th:if="${mandat.dateFin == null}" th:action="@{'/mandats/cloturer/' + ${mandat.id}}" method="post">
+                        <button type="submit" class="btn-outline-ink btn-sm">🏳 Clôturer</button>
+                    </form>
+                </td>
+            </tr>
+            <tr th:if="${mandatsEquipe.isEmpty()}">
+                <td colspan="6" style="text-align:center; color:var(--ink-faint);">Aucune responsabilité d'équipe enregistrée.</td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+</main>
+</body>
+</html>

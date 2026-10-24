@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Ajouter une publication')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container mt-4" style="max-width: 650px;">
+    <h2 class="fw-bold mb-4">➕ Ajouter une publication</h2>
+
+    <div class="card p-4">
+        <form th:action="@{/publications/enregistrer}" th:object="${publication}" method="post">
+
+            <div class="mb-3">
+                <label class="form-label">Titre</label>
+                <input type="text" class="form-control" th:field="*{titre}" required/>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Auteur(s)</label>
+                <select class="form-select" th:field="*{auteurs}" multiple size="6" required>
+                    <option th:each="m : ${membres}" th:value="${m.id}" th:text="${m.nom} + ' ' + ${m.prenom}"></option>
+                </select>
+                <div class="form-text">Maintiens Ctrl (ou Cmd) pour sélectionner plusieurs auteurs.</div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col">
+                    <label class="form-label">Année</label>
+                    <input type="number" class="form-control" th:field="*{annee}"/>
+                </div>
+                <div class="col">
+                    <label class="form-label">Équipe</label>
+                    <select class="form-select" th:field="*{equipe}">
+                        <option value="">— Aucune —</option>
+                        <option th:each="e : ${equipes}" th:value="${e.id}" th:text="${e.nom}"></option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Résumé</label>
+                <textarea class="form-control" rows="4" th:field="*{resume}"></textarea>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label">Lien (PDF, DOI...)</label>
+                <input type="text" class="form-control" th:field="*{lien}" placeholder="https://..."/>
+            </div>
+
+            <div class="d-flex justify-content-between">
+                <a href="/publications" class="btn btn-outline-secondary">← Annuler</a>
+                <button type="submit" class="btn btn-primary px-4">
+                    <i class="fa-solid fa-floppy-disk"></i> Enregistrer
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

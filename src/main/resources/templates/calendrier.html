@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Calendrier')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container mt-4" style="max-width: 950px;">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold">📅 Calendrier des événements</h2>
+        <a th:if="${!estMoisCourant}" href="/calendrier" class="btn btn-outline-secondary btn-sm">Aujourd'hui</a>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <a th:href="@{/calendrier(annee=${anneePrecedente}, mois=${moisPrecedent})}" class="btn btn-outline-secondary">← Mois précédent</a>
+        <h4 class="fw-bold mb-0" th:text="${#strings.capitalize(nomMois)} + ' ' + ${anneeAffichee}"></h4>
+        <a th:href="@{/calendrier(annee=${anneeSuivante}, mois=${moisSuivant})}" class="btn btn-outline-secondary">Mois suivant →</a>
+    </div>
+
+    <div class="card p-3">
+        <div class="d-grid" style="grid-template-columns: repeat(7, 1fr); gap: 4px; font-weight: bold; text-align: center; margin-bottom: 8px;">
+            <div>Lun</div><div>Mar</div><div>Mer</div><div>Jeu</div><div>Ven</div><div>Sam</div><div>Dim</div>
+        </div>
+
+        <div class="d-grid" style="grid-template-columns: repeat(7, 1fr); gap: 4px;">
+
+            <div th:each="i : ${#numbers.sequence(1, decalagePremierJour)}" style="min-height: 90px;"></div>
+
+            <div th:each="jour : ${#numbers.sequence(1, nombreJoursMois)}"
+                 style="min-height: 90px; border: 1px solid #DEDFDB; border-radius: 4px; padding: 4px; font-size: 0.85rem;">
+                <div class="fw-bold" th:text="${jour}"></div>
+                <div th:each="e : ${evenementsParJour.get(jour)}" class="mt-1">
+                    <a th:href="@{'/evenements/' + ${e.id}}"
+                       class="d-block text-truncate text-decoration-none"
+                       style="background:#1B3A63; color:#fff; border-radius:3px; padding:2px 4px; font-size:0.75rem;"
+                       th:text="${e.titre}"
+                       th:title="${e.titre}"></a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <a href="/evenements" class="btn btn-outline-secondary mt-4">← Voir la liste des événements</a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

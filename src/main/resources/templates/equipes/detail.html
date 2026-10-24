@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head('Detail equipe')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container mt-4">
+    <h2 class="fw-bold mb-1" th:text="${equipe.nom}"></h2>
+    <span th:if="${equipe.archive}" class="badge bg-dark mb-2">Archivée</span>
+    <p class="text-muted" th:text="${equipe.description}"></p>
+
+    <div class="card p-3 mb-3">
+        <h6 class="fw-bold mb-1">🎖️ Chef d'équipe actuel</h6>
+        <p class="mb-0" th:if="${chefEquipe != null}"
+           th:text="${chefEquipe.membre.nom} + ' ' + ${chefEquipe.membre.prenom} + ' (depuis ' + ${chefEquipe.dateDebut} + ')'"></p>
+        <p class="text-muted mb-0" th:if="${chefEquipe == null}">Aucun chef d'équipe désigné pour le moment</p>
+        <a href="/mandats/ajouter" class="small" sec:authorize="hasRole('DIRECTEUR')">Assigner un mandat de chef d'équipe →</a>
+    </div>
+
+    <div class="card p-3 mb-3" sec:authorize="hasAnyRole('PERMANENT','DIRECTEUR','VICE_DIRECTEUR','CHEF_EQUIPE','MEMBRE_EQUIPE','ASSOCIE')">
+        <h6 class="fw-bold mb-1">💬 Discussion de l'équipe</h6>
+        <p class="text-muted small mb-2">Échanges internes réservés aux membres de cette équipe.</p>
+        <a th:href="@{/discussions/equipe/{id}(id=${equipe.id})}" class="btn btn-outline-primary btn-sm">
+            Ouvrir la discussion →
+        </a>
+    </div>
+
+    <div class="card p-3 mt-3">
+        <h5 class="mb-3">👥 Membres de l'équipe</h5>
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    <th>Email</th>
+                    <th>Statut</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="membre : ${equipe.membres}">
+                    <td th:text="${membre.nom}"></td>
+                    <td th:text="${membre.prenom}"></td>
+                    <td th:text="${membre.email}"></td>
+                    <td><span class="badge bg-info text-dark" th:text="${membre.statut}"></span></td>
+                </tr>
+                <tr th:if="${equipe.membres.isEmpty()}">
+                    <td colspan="4" class="text-center text-muted py-4">Aucun membre dans cette équipe</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <a href="/equipes" class="btn btn-outline-secondary mt-3">← Retour aux équipes</a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

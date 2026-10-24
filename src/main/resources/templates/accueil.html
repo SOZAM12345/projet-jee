@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Accueil')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: navbar}"></header>
+
+<main class="container">
+    <section class="hero">
+        <div>
+            <p class="eyebrow">Faculté des Sciences Ben M'Sik — Casablanca</p>
+            <h1>Le laboratoire de recherche en science des données du Maroc</h1>
+            <p class="lead">
+                Le LIAS centralise la gestion des activités scientifiques et administratives du
+                laboratoire, assure la traçabilité de ses décisions et capitalise sa mémoire
+                institutionnelle à travers ses membres, ses équipes et ses publications.
+            </p>
+            <div style="display:flex; gap:1rem; flex-wrap:wrap;">
+                <a href="/demandes/soumettre" class="btn-brass">Rejoindre le laboratoire</a>
+                <a href="/equipes" class="btn-outline-ink">Voir les équipes</a>
+            </div>
+        </div>
+        <div>
+            <dl class="fact-list">
+                <div class="fact-row"><dt>Établissement</dt><dd>FSBM Casablanca</dd></div>
+                <div class="fact-row"><dt>Domaine</dt><dd>Data Science &amp; Big Data</dd></div>
+                <div class="fact-row"><dt>Gouvernance</dt><dd>Directeur en mandat</dd></div>
+                <div class="fact-row"><dt>Mémoire</dt><dd>Historisée &amp; tracée</dd></div>
+            </dl>
+        </div>
+    </section>
+
+    <!-- §1 du cahier des charges : objectifs du système -->
+    <section style="padding-bottom:4rem;">
+        <p class="eyebrow">Pourquoi le LIAS Lab</p>
+        <h2 class="section-title" style="font-size:1.6rem; margin-bottom:2rem;">Les objectifs du système</h2>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(340px, 1fr)); gap:1.25rem;">
+            <div class="card" style="padding:1.5rem;">
+                <div class="icon-tile" style="background:#2D6CDF;">
+                    <i class="fa-solid fa-building-columns" style="color:#fff; font-size:1.2rem;"></i>
+                </div>
+                <p style="font-weight:700; color:var(--ink); margin-bottom:.4rem;">Centraliser la gestion</p>
+                <p style="color:var(--ink-soft); font-size:.9rem; margin:0;">Un point d'entrée unique pour piloter l'ensemble des activités du laboratoire LIAS.</p>
+            </div>
+            <div class="card" style="padding:1.5rem;">
+                <div class="icon-tile" style="background:#9333EA;">
+                    <i class="fa-solid fa-magnifying-glass-chart" style="color:#fff; font-size:1.2rem;"></i>
+                </div>
+                <p style="font-weight:700; color:var(--ink); margin-bottom:.4rem;">Assurer la traçabilité</p>
+                <p style="color:var(--ink-soft); font-size:.9rem; margin:0;">Chaque activité scientifique et administrative est historisée et consultable.</p>
+            </div>
+            <div class="card" style="padding:1.5rem;">
+                <div class="icon-tile" style="background:#0D9488;">
+                    <i class="fa-solid fa-box-archive" style="color:#fff; font-size:1.2rem;"></i>
+                </div>
+                <p style="font-weight:700; color:var(--ink); margin-bottom:.4rem;">Capitaliser la mémoire</p>
+                <p style="color:var(--ink-soft); font-size:.9rem; margin:0;">Documents, événements et décisions constituent la mémoire institutionnelle du labo.</p>
+            </div>
+            <div class="card" style="padding:1.5rem;">
+                <div class="icon-tile" style="background:#4F46E5;">
+                    <i class="fa-solid fa-sitemap" style="color:#fff; font-size:1.2rem;"></i>
+                </div>
+                <p style="font-weight:700; color:var(--ink); margin-bottom:.4rem;">Structurer les responsabilités</p>
+                <p style="color:var(--ink-soft); font-size:.9rem; margin:0;">Membres, équipes et mandats sont organisés avec des rôles clairs et historisés.</p>
+            </div>
+            <div class="card" style="padding:1.5rem;">
+                <div class="icon-tile" style="background:#E11D48;">
+                    <i class="fa-solid fa-file-signature" style="color:#fff; font-size:1.2rem;"></i>
+                </div>
+                <p style="font-weight:700; color:var(--ink); margin-bottom:.4rem;">Produire le rapport annuel</p>
+                <p style="color:var(--ink-soft); font-size:.9rem; margin:0;">Le rapport d'activité, condition du budget, est généré à partir des données réelles du labo.</p>
+            </div>
+            <div class="card" style="padding:1.5rem;">
+                <div class="icon-tile" style="background:#0891B2;">
+                    <i class="fa-solid fa-handshake" style="color:#fff; font-size:1.2rem;"></i>
+                </div>
+                <p style="font-weight:700; color:var(--ink); margin-bottom:.4rem;">Faciliter la collaboration</p>
+                <p style="color:var(--ink-soft); font-size:.9rem; margin:0;">Communication interne et partenariats externes s'appuient sur la même plateforme.</p>
+            </div>
+        </div>
+    </section>
+
+    <section style="padding-bottom:4rem;">
+        <p class="eyebrow">Explorer</p>
+        <div class="toc">
+            <div class="toc-row">
+                <div>
+                    <p class="toc-row__title">Équipes</p>
+                    <p class="toc-row__desc">Les groupes de recherche du laboratoire et leurs membres.</p>
+                </div>
+                <a href="/equipes" class="toc-row__link">Voir</a>
+            </div>
+            <div class="toc-row">
+                <div>
+                    <p class="toc-row__title">Événements</p>
+                    <p class="toc-row__desc">Conférences, séminaires et workshops organisés par le LIAS.</p>
+                </div>
+                <a href="/evenements" class="toc-row__link">Voir</a>
+            </div>
+            <div class="toc-row" style="border-bottom:none;">
+                <div>
+                    <p class="toc-row__title">Publications</p>
+                    <p class="toc-row__desc">Les travaux scientifiques publiés par nos chercheurs.</p>
+                </div>
+                <a href="/publications" class="toc-row__link">Voir</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Vue d'ensemble des modules internes du système -->
+    <section style="padding-bottom:4rem;">
+        <p class="eyebrow">Le système</p>
+        <h2 class="section-title" style="font-size:1.6rem; margin-bottom:2rem;">Les modules du laboratoire</h2>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:1.25rem;">
+            <div class="card" style="padding:1.5rem;">
+                <div class="icon-tile" style="background:#2D6CDF;"><i class="fa-solid fa-users" style="color:#fff;"></i></div>
+                <p style="font-weight:700; color:var(--ink); margin-bottom:.3rem;">Membres &amp; équipes</p>
+                <p style="color:var(--ink-soft); font-size:.88rem; margin:0;">Profils, statuts, affiliations et historique complet de chaque membre.</p>
+            </div>
+            <div class="card" style="padding:1.5rem;">
+                <div class="icon-tile" style="background:#4F46E5;"><i class="fa-solid fa-landmark" style="color:#fff;"></i></div>
+                <p style="font-weight:700; color:var(--ink); margin-bottom:.3rem;">Gouvernance</p>
+                <p style="color:var(--ink-soft); font-size:.88rem; margin:0;">Mandats, rôles et responsabilités, avec historisation complète.</p>
+            </div>
+            <div class="card" style="padding:1.5rem;">
+                <div class="icon-tile" style="background:#0D9488;"><i class="fa-solid fa-calendar-days" style="color:#fff;"></i></div>
+                <p style="font-weight:700; color:var(--ink); margin-bottom:.3rem;">Événements &amp; calendrier</p>
+                <p style="color:var(--ink-soft); font-size:.88rem; margin:0;">Conférences, séminaires, workshops et navigation temporelle.</p>
+            </div>
+            <div class="card" style="padding:1.5rem;">
+                <div class="icon-tile" style="background:#9333EA;"><i class="fa-solid fa-folder-open" style="color:#fff;"></i></div>
+                <p style="font-weight:700; color:var(--ink); margin-bottom:.3rem;">Documents</p>
+                <p style="color:var(--ink-soft); font-size:.88rem; margin:0;">Archivage structuré par événement et par date, recherche incluse.</p>
+            </div>
+            <div class="card" style="padding:1.5rem;">
+                <div class="icon-tile" style="background:#E11D48;"><i class="fa-solid fa-chart-line" style="color:#fff;"></i></div>
+                <p style="font-weight:700; color:var(--ink); margin-bottom:.3rem;">Rapport annuel</p>
+                <p style="color:var(--ink-soft); font-size:.88rem; margin:0;">Génération automatique basée sur événements, publications et activités.</p>
+            </div>
+            <div class="card" style="padding:1.5rem;">
+                <div class="icon-tile" style="background:#0891B2;"><i class="fa-solid fa-comments" style="color:#fff;"></i></div>
+                <p style="font-weight:700; color:var(--ink); margin-bottom:.3rem;">Communication interne</p>
+                <p style="color:var(--ink-soft); font-size:.88rem; margin:0;">Discussions privées, par équipe et par événement.</p>
+            </div>
+            <div class="card" style="padding:1.5rem;">
+                <div class="icon-tile" style="background:#6366F1;"><i class="fa-solid fa-book-open" style="color:#fff;"></i></div>
+                <p style="font-weight:700; color:var(--ink); margin-bottom:.3rem;">Publications</p>
+                <p style="color:var(--ink-soft); font-size:.88rem; margin:0;">Ajout et consultation, classées par auteur, année et équipe.</p>
+            </div>
+            <div class="card" style="padding:1.5rem;">
+                <div class="icon-tile" style="background:#0EA5E9;"><i class="fa-solid fa-boxes-stacked" style="color:#fff;"></i></div>
+                <p style="font-weight:700; color:var(--ink); margin-bottom:.3rem;">Matériel &amp; demandes</p>
+                <p style="color:var(--ink-soft); font-size:.88rem; margin:0;">Suivi des arrivages, distribution équitable et validation des besoins.</p>
+            </div>
+            <div class="card" style="padding:1.5rem;">
+                <div class="icon-tile" style="background:#7C3AED;"><i class="fa-solid fa-file-contract" style="color:#fff;"></i></div>
+                <p style="font-weight:700; color:var(--ink); margin-bottom:.3rem;">Conventions &amp; partenariats</p>
+                <p style="color:var(--ink-soft); font-size:.88rem; margin:0;">Gestion des partenaires, conventions et suivi des activités associées.</p>
+            </div>
+            <div class="card" style="padding:1.5rem;">
+                <div class="icon-tile" style="background:#059669;"><i class="fa-solid fa-clipboard-list" style="color:#fff;"></i></div>
+                <p style="font-weight:700; color:var(--ink); margin-bottom:.3rem;">Réunions &amp; PV</p>
+                <p style="color:var(--ink-soft); font-size:.88rem; margin:0;">Ordre du jour, upload des procès-verbaux et archivage complet.</p>
+            </div>
+            <div class="card" style="padding:1.5rem;">
+                <div class="icon-tile" style="background:#DB2777;"><i class="fa-solid fa-magnifying-glass" style="color:#fff;"></i></div>
+                <p style="font-weight:700; color:var(--ink); margin-bottom:.3rem;">Recherche globale</p>
+                <p style="color:var(--ink-soft); font-size:.88rem; margin:0;">Membres, documents, événements et publications en une seule recherche.</p>
+            </div>
+            <div class="card" style="padding:1.5rem;">
+                <div class="icon-tile" style="background:#2563EB;"><i class="fa-solid fa-bell" style="color:#fff;"></i></div>
+                <p style="font-weight:700; color:var(--ink); margin-bottom:.3rem;">Notifications</p>
+                <p style="color:var(--ink-soft); font-size:.88rem; margin:0;">Alertes sur les événements, validations et nouveaux documents.</p>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- Footer institutionnel avec contact -->
+<footer style="background:var(--ink); color:#fff; margin-top:3rem; padding:3.5rem 0 1.5rem;">
+    <div class="container">
+        <div style="display:grid; grid-template-columns:1.3fr 1fr 1fr; gap:2.5rem; margin-bottom:2.5rem;">
+            <div>
+                <p style="font-family:'Plus Jakarta Sans',sans-serif; font-weight:800; font-size:1.2rem; margin-bottom:.75rem;">LIAS</p>
+                <p style="color:#C7D2DE; font-size:.9rem; line-height:1.6; max-width:32ch;">
+                    Laboratoire de recherche en science des données, Faculté des Sciences Ben M'Sik, Université Hassan II de Casablanca.
+                </p>
+            </div>
+            <div>
+                <p style="font-weight:700; margin-bottom:1rem; font-size:.95rem;">Liens rapides</p>
+                <div style="display:flex; flex-direction:column; gap:.6rem;">
+                    <a href="/equipes" style="color:#C7D2DE; text-decoration:none; font-size:.9rem;">Équipes</a>
+                    <a href="/evenements" style="color:#C7D2DE; text-decoration:none; font-size:.9rem;">Événements</a>
+                    <a href="/publications" style="color:#C7D2DE; text-decoration:none; font-size:.9rem;">Publications</a>
+                    <a href="/calendrier" style="color:#C7D2DE; text-decoration:none; font-size:.9rem;">Calendrier</a>
+                </div>
+            </div>
+            <div>
+                <p style="font-weight:700; margin-bottom:1rem; font-size:.95rem;">Contact</p>
+                <div style="display:flex; flex-direction:column; gap:.7rem; font-size:.9rem; color:#C7D2DE;">
+                    <span><i class="fa-solid fa-location-dot" style="width:16px;"></i>&nbsp; Faculté des Sciences Ben M'Sik, Casablanca</span>
+                    <span><i class="fa-solid fa-phone" style="width:16px;"></i>&nbsp; (+212) 6 61 44 24 27</span>
+                    <span><i class="fa-solid fa-envelope" style="width:16px;"></i>&nbsp; fsbm.contact@univh2c.ma</span>
+                </div>
+            </div>
+        </div>
+        <div style="border-top:1px solid rgba(255,255,255,.15); padding-top:1.5rem; text-align:center; color:#8FA0B5; font-size:.82rem;">
+            Application LIAS Lab — Master Data Science &amp; Big Data — FSBM Casablanca
+        </div>
+    </div>
+</footer>
+</body>
+</html>

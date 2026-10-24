@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Notifications')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold m-0">🔔 Notifications</h2>
+        <form th:action="@{/notifications/lire-tout}" method="post" th:if="${!notifications.isEmpty()}">
+            <button type="submit" class="btn btn-outline-secondary btn-sm">Tout marquer comme lu</button>
+        </form>
+    </div>
+
+    <div th:if="${notifications.isEmpty()}" class="text-muted text-center py-5">
+        Aucune notification pour le moment.
+    </div>
+
+    <div class="card mb-2 p-3" th:each="n : ${notifications}"
+         th:classappend="${n.lu} ? '' : 'border-primary'">
+        <div class="d-flex justify-content-between align-items-start gap-3">
+            <div>
+                <span class="badge bg-secondary mb-1" th:text="${n.type}"></span>
+                <p class="mb-1" th:text="${n.message}"></p>
+                <small class="text-muted" th:text="${#temporals.format(n.dateCreation, 'dd/MM/yyyy HH:mm')}"></small>
+            </div>
+            <div class="text-end">
+                <a th:if="${n.lien != null}" th:href="${n.lien}" class="btn btn-sm btn-primary mb-1">Voir</a>
+                <form th:if="${!n.lu}" th:action="@{/notifications/lire/{id}(id=${n.id})}" method="post">
+                    <button type="submit" class="btn btn-sm btn-outline-secondary">Marquer comme lu</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

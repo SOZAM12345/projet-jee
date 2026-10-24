@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="nav(section)" class="mb-4">
+    <ul class="nav nav-pills">
+        <li class="nav-item">
+            <a class="nav-link" th:classappend="${section == 'comptes'} ? ' active'"
+               th:href="@{/admin/comptes}">👥 Comptes</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:classappend="${section == 'parametrage'} ? ' active'"
+               th:href="@{/admin/parametrage}">⚙️ Paramétrage</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:classappend="${section == 'maintenance'} ? ' active'"
+               th:href="@{/admin/maintenance}">🛠️ Maintenance</a>
+        </li>
+    </ul>
+</div>
+</body>
+</html>

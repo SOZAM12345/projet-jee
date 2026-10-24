@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Discussion avec ' + ${autre.prenom})}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container mt-4" style="max-width:650px;">
+    <a href="/discussions" class="text-decoration-none">← Mes discussions</a>
+    <h2 class="fw-bold my-3" th:text="'Discussion avec ' + ${autre.prenom} + ' ' + ${autre.nom}"></h2>
+
+    <div class="mb-4" style="max-height:500px; overflow-y:auto;">
+        <div th:if="${messages.isEmpty()}" class="text-muted text-center py-4">
+            Aucun message pour l'instant. Écrivez le premier !
+        </div>
+        <div th:each="m : ${messages}"
+             th:classappend="${m.auteur.id == moi.id} ? 'text-end' : 'text-start'"
+             class="mb-2">
+            <div class="d-inline-block p-2 rounded"
+                 th:classappend="${m.auteur.id == moi.id} ? 'bg-primary text-white' : 'bg-light'"
+                 style="max-width:75%;">
+                <div th:text="${m.contenu}"></div>
+                <small th:classappend="${m.auteur.id == moi.id} ? 'text-white-50' : 'text-muted'"
+                       th:text="${#temporals.format(m.dateEnvoi, 'HH:mm')}"></small>
+            </div>
+        </div>
+    </div>
+
+    <form th:action="@{/discussions/avec/{id}/envoyer(id=${autre.id})}" method="post" class="d-flex gap-2">
+        <textarea name="contenu" class="form-control" rows="2" placeholder="Écrire un message..." required></textarea>
+        <button type="submit" class="btn btn-primary align-self-end">Envoyer</button>
+    </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

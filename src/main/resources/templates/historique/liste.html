@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Historique affiliation')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container mt-4" style="max-width: 750px;">
+    <h2 class="fw-bold mb-1" th:text="'Historique d\'affiliation — ' + ${membre.nom} + ' ' + ${membre.prenom}"></h2>
+    <p class="text-muted">Section 4.3 — un membre peut quitter puis revenir, chaque période est conservée</p>
+
+    <div class="card p-3 mb-3">
+        <table class="table table-sm mb-0">
+            <thead>
+                <tr>
+                    <th>Date début</th>
+                    <th>Date fin</th>
+                    <th>Statut</th>
+                    <th>Motif d'ouverture</th>
+                    <th>Motif de clôture</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="p : ${historique}">
+                    <td th:text="${p.dateDebut}"></td>
+                    <td th:text="${p.dateFin != null ? p.dateFin : '—'}"></td>
+                    <td>
+                        <span th:if="${p.dateFin == null}" class="badge bg-success">En cours</span>
+                        <span th:unless="${p.dateFin == null}" class="badge bg-secondary">Terminée</span>
+                    </td>
+                    <td th:text="${p.motifOuverture ?: '—'}"></td>
+                    <td th:text="${p.motifCloture ?: '—'}"></td>
+                </tr>
+                <tr th:if="${historique.isEmpty()}">
+                    <td colspan="5" class="text-center text-muted py-3">Aucune période enregistrée</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <p class="text-muted small">
+        ℹ️ Cet historique est en lecture seule. Pour ouvrir ou clôturer une période, utilise les actions
+        "Désactiver", "Réactiver" ou "Mettre en retraite" depuis la liste des membres — elles maintiennent
+        le statut du compte et l'historique cohérents entre eux.
+    </p>
+
+    <a th:href="@{/membres/{id}(id=${membre.id})}" class="btn btn-outline-secondary">← Retour au profil</a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

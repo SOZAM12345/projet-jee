@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Historique des rôles')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: navbar}"></header>
+
+<main class="container">
+    <div class="page-narrow" style="max-width:750px;">
+        <p class="eyebrow">Gouvernance</p>
+        <h1 class="serif" style="font-size:1.9rem; margin-bottom:.5rem;"
+            th:text="'Historique des rôles — ' + ${membre.prenom} + ' ' + ${membre.nom}"></h1>
+        <p style="color:var(--ink-soft); margin-bottom:2rem;">
+            Tous les mandats occupés par ce membre, passés et en cours.
+        </p>
+
+        <div class="panel">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Rôle</th>
+                    <th>Équipe</th>
+                    <th>Début</th>
+                    <th>Fin</th>
+                    <th>Statut</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="mandat : ${mandats}">
+                    <td th:text="${mandat.typeRole}"></td>
+                    <td th:text="${mandat.equipe != null} ? ${mandat.equipe.nom} : '—'"></td>
+                    <td th:text="${mandat.dateDebut}"></td>
+                    <td th:text="${mandat.dateFin != null} ? ${mandat.dateFin} : '—'"></td>
+                    <td>
+                        <span class="tag tag-teal" th:if="${mandat.dateFin == null}">En cours</span>
+                        <span class="tag tag-ink" th:if="${mandat.dateFin != null}">Terminé</span>
+                    </td>
+                </tr>
+                <tr th:if="${mandats.isEmpty()}">
+                    <td colspan="5" style="text-align:center; color:var(--ink-faint);">Aucun mandat enregistré.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <a th:href="@{'/membres/' + ${membre.id}}" class="btn-outline-ink" style="margin-top:1.5rem; display:inline-block;">
+            ← Retour au profil
+        </a>
+    </div>
+</main>
+</body>
+</html>

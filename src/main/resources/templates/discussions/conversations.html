@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Mes discussions')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container mt-4" style="max-width:650px;">
+    <h2 class="fw-bold mb-4">💬 Discussions entre membres</h2>
+
+    <div class="card p-3 mb-4" th:if="${!notifsEquipeNonLues.isEmpty()}">
+        <h6 class="fw-bold mb-2">👥 Discussions d'équipe non lues</h6>
+        <a th:each="n : ${notifsEquipeNonLues}" th:href="${n.lien}"
+           class="d-flex justify-content-between align-items-center p-2 text-decoration-none border-bottom">
+            <span th:text="${n.message}" class="text-dark"></span>
+            <span class="text-muted small">Voir →</span>
+        </a>
+    </div>
+
+    <div class="card p-3 mb-4" th:if="${!notifsEvenementNonLues.isEmpty()}">
+        <h6 class="fw-bold mb-2">📅 Discussions d'événement non lues</h6>
+        <a th:each="n : ${notifsEvenementNonLues}" th:href="${n.lien}"
+           class="d-flex justify-content-between align-items-center p-2 text-decoration-none border-bottom">
+            <span th:text="${n.message}" class="text-dark"></span>
+            <span class="text-muted small">Voir →</span>
+        </a>
+    </div>
+
+    <div class="card p-3 mb-4">
+        <h6 class="fw-bold mb-2">Démarrer une nouvelle discussion</h6>
+        <form action="/discussions/avec" method="get" onsubmit="event.preventDefault(); window.location.href='/discussions/avec/' + document.getElementById('choixMembre').value;">
+            <div class="d-flex gap-2">
+                <select id="choixMembre" class="form-select" required>
+                    <option value="" disabled selected>— Choisir un membre —</option>
+                    <option th:each="m : ${tousLesMembres}"
+                            th:if="${m.id != moi.id}"
+                            th:value="${m.id}"
+                            th:text="${m.prenom} + ' ' + ${m.nom}"></option>
+                </select>
+                <button type="submit" class="btn btn-primary">Discuter</button>
+            </div>
+        </form>
+    </div>
+
+    <h6 class="fw-bold mb-2">Discussions privées existantes</h6>
+    <div class="card p-2">
+        <div th:if="${interlocuteurs.isEmpty()}" class="text-muted text-center py-3">
+            Aucune discussion pour le moment.
+        </div>
+        <a th:each="p : ${interlocuteurs}" th:href="@{/discussions/avec/{id}(id=${p.id})}"
+           class="d-flex justify-content-between align-items-center p-2 text-decoration-none border-bottom">
+            <span class="d-flex align-items-center gap-2">
+                <span th:text="${p.prenom} + ' ' + ${p.nom}" class="text-dark"></span>
+                <span th:if="${nonLusParInterlocuteur.get(p.id) != null and nonLusParInterlocuteur.get(p.id) > 0}"
+                      class="badge bg-danger rounded-pill"
+                      th:text="${nonLusParInterlocuteur.get(p.id)}"></span>
+            </span>
+            <span class="text-muted small">Voir →</span>
+        </a>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

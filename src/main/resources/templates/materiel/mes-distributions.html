@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Mon matériel')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container mt-4">
+    <h2 class="fw-bold mb-4">📦 Matériel reçu</h2>
+
+    <div class="card p-3">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>Matériel</th>
+                    <th>Quantité reçue</th>
+                    <th>Date de distribution</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="d : ${distributions}">
+                    <td th:text="${d.materiel.nom}"></td>
+                    <td th:text="${d.quantite}"></td>
+                    <td th:text="${d.dateDistribution}"></td>
+                </tr>
+                <tr th:if="${distributions.isEmpty()}">
+                    <td colspan="3" class="text-center text-muted py-4">Aucun matériel reçu pour l'instant</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

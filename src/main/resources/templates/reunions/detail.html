@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Détail réunion')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container mt-4" style="max-width: 700px;">
+    <h2 class="fw-bold mb-1" th:text="${reunion.titre}"></h2>
+    <p class="text-muted mb-4">
+        <span th:text="${reunion.dateReunion}"></span>
+        <span th:if="${reunion.heureReunion != null}" th:text="' à ' + ${reunion.heureReunion}"></span>
+        <span th:if="${reunion.equipe != null}" th:text="' — ' + ${reunion.equipe.nom}"></span>
+    </p>
+
+    <div class="card p-4 mb-3">
+        <h6 class="fw-bold">Ordre du jour</h6>
+        <p style="white-space: pre-line;" th:text="${reunion.ordreDuJour}"></p>
+    </div>
+
+    <div class="card p-4 mb-3">
+        <h6 class="fw-bold mb-3">Participants</h6>
+        <ul class="mb-0" th:if="${!reunion.participants.isEmpty()}">
+            <li th:each="p : ${reunion.participants}" th:text="${p.prenom} + ' ' + ${p.nom}"></li>
+        </ul>
+        <p class="text-muted mb-0" th:if="${reunion.participants.isEmpty()}">Aucun participant renseigné</p>
+    </div>
+
+    <div class="card p-4 mb-4">
+        <h6 class="fw-bold mb-3">Procès-verbal</h6>
+
+        <div th:if="${reunion.cheminPv != null}">
+            <a th:href="@{/reunions/{id}/telecharger-pv(id=${reunion.id})}" class="btn btn-outline-primary">
+                <i class="fa-solid fa-download"></i> Télécharger le PV
+            </a>
+        </div>
+
+        <form th:if="${reunion.cheminPv == null}" th:action="@{/reunions/{id}/uploader-pv(id=${reunion.id})}"
+              method="post" enctype="multipart/form-data" class="d-flex gap-2">
+            <input type="file" name="pv" class="form-control" required/>
+            <button type="submit" class="btn btn-primary">Uploader</button>
+        </form>
+    </div>
+
+    <a href="/reunions" class="btn btn-outline-secondary">← Retour aux réunions</a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

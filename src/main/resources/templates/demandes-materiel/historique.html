@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Historique des demandes')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container mt-4">
+    <h2 class="fw-bold mb-4">📜 Historique des demandes de matériel</h2>
+
+    <div class="card p-3">
+        <table class="table table-sm align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>Demandeur</th>
+                    <th>Désignation</th>
+                    <th>Quantité</th>
+                    <th>Statut</th>
+                    <th>Soumise le</th>
+                    <th>Décidée le</th>
+                    <th>Par</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="d : ${demandes}">
+                    <td th:text="${d.demandeur.prenom} + ' ' + ${d.demandeur.nom}"></td>
+                    <td th:text="${d.designation}"></td>
+                    <td th:text="${d.quantiteSouhaitee}"></td>
+                    <td>
+                        <span class="badge bg-warning text-dark" th:if="${d.statut.name() == 'EN_ATTENTE'}">En attente</span>
+                        <span class="badge bg-success" th:if="${d.statut.name() == 'VALIDEE'}">Validée</span>
+                        <span class="badge bg-danger" th:if="${d.statut.name() == 'REFUSEE'}">Refusée</span>
+                    </td>
+                    <td th:text="${#temporals.format(d.dateSoumission, 'dd/MM/yyyy')}"></td>
+                    <td th:text="${d.dateDecision != null} ? ${#temporals.format(d.dateDecision, 'dd/MM/yyyy')} : '—'"></td>
+                    <td th:text="${d.validateur != null} ? (${d.validateur.prenom} + ' ' + ${d.validateur.nom}) : '—'"></td>
+                </tr>
+                <tr th:if="${demandes.isEmpty()}">
+                    <td colspan="7" class="text-center text-muted py-4">Aucune demande enregistrée</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <a href="/demandes-materiel" class="btn btn-outline-secondary mt-4">← Retour aux demandes en attente</a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

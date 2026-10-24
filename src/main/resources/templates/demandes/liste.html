@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Demandes adhesion')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container mt-4">
+    <h2 class="fw-bold mb-2">📋 Demandes d'adhésion</h2>
+
+    <div th:if="${directeurs == null or directeurs.isEmpty()}" class="alert alert-warning">
+        ⚠️ Aucun membre n'a de mandat "Directeur" actif. Crée d'abord un mandat Directeur
+        (<a href="/mandats/ajouter">ici</a>) avant de pouvoir valider une demande.
+    </div>
+
+    <div class="card p-3">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    <th>Email</th>
+                    <th>Motivation</th>
+                    <th>CV</th>
+                    <th>Statut</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="demande : ${demandes}">
+                    <td th:text="${demande.nom}"></td>
+                    <td th:text="${demande.prenom}"></td>
+                    <td th:text="${demande.email}"></td>
+                    <td th:text="${#strings.abbreviate(demande.motivation, 40)}"></td>
+                    <td>
+                        <a th:if="${demande.cheminCv != null}"
+                           th:href="@{'/uploads/cv/' + ${demande.cheminCv}}"
+                           target="_blank" class="btn btn-sm btn-outline-secondary">
+                            <i class="fa-solid fa-file-pdf"></i>
+                        </a>
+                        <span th:if="${demande.cheminCv == null}" class="text-muted">—</span>
+                    </td>
+                    <td>
+                        <span th:if="${demande.statut.name() == 'EN_ATTENTE'}" class="badge bg-warning text-dark" th:text="${demande.statut}"></span>
+                        <span th:if="${demande.statut.name() == 'ACCEPTEE'}" class="badge bg-success" th:text="${demande.statut}"></span>
+                        <span th:if="${demande.statut.name() == 'REFUSEE'}" class="badge bg-danger" th:text="${demande.statut}"></span>
+                    </td>
+
+                    <td class="text-end" th:if="${demande.statut.name() == 'EN_ATTENTE'}">
+                        <div class="d-flex gap-1 justify-content-end align-items-center flex-wrap">
+                            <form th:action="@{/demandes/accepter/{id}(id=${demande.id})}" method="post" class="d-flex gap-1">
+                                <select name="statutChoisi" class="form-select form-select-sm" style="width:110px" required>
+                                    <option th:each="s : ${statuts}" th:value="${s}" th:text="${s}"></option>
+                                </select>
+                                <select name="directeurId" class="form-select form-select-sm" style="width:110px" required>
+                                    <option th:each="d : ${directeurs}" th:value="${d.id}" th:text="${d.nom}"></option>
+                                </select>
+                                <button type="submit" class="btn btn-sm btn-success" th:disabled="${directeurs == null or directeurs.isEmpty()}">
+                                    <i class="fa-solid fa-check"></i>
+                                </button>
+                            </form>
+                            <form th:action="@{/demandes/refuser/{id}(id=${demande.id})}" method="post" class="d-flex gap-1">
+                                <select name="directeurId" class="form-select form-select-sm" style="width:110px" required>
+                                    <option th:each="d : ${directeurs}" th:value="${d.id}" th:text="${d.nom}"></option>
+                                </select>
+                                <button type="submit" class="btn btn-sm btn-danger" th:disabled="${directeurs == null or directeurs.isEmpty()}">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+
+                    <td class="text-end small text-muted" th:unless="${demande.statut.name() == 'EN_ATTENTE'}">
+                        <span th:if="${demande.validateur != null}" th:text="'par ' + ${demande.validateur.nom}"></span><br/>
+                        <span th:if="${demande.dateDecision != null}" th:text="${demande.dateDecision}"></span>
+                    </td>
+                </tr>
+                <tr th:if="${demandes.isEmpty()}">
+                    <td colspan="7" class="text-center text-muted py-4">Aucune demande en attente</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

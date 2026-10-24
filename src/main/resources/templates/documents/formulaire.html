@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Ajouter un document')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container mt-4" style="max-width: 650px;">
+    <h2 class="fw-bold mb-4">📄 Ajouter un document</h2>
+
+    <div class="card p-4">
+        <form th:action="@{/documents/enregistrer}" th:object="${document}" method="post" enctype="multipart/form-data">
+
+            <div class="mb-3">
+                <label class="form-label">Titre</label>
+                <input type="text" class="form-control" th:field="*{titre}" required/>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Type de document</label>
+                <select class="form-select" th:field="*{type}" required>
+                    <option th:each="t : ${types}" th:value="${t}" th:text="${t}"></option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Fichier</label>
+                <input type="file" class="form-control" name="fichier" required/>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Description</label>
+                <textarea class="form-control" rows="3" th:field="*{description}"></textarea>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label">Événement lié (optionnel)</label>
+                <select class="form-select" th:field="*{evenement}">
+                    <option value="">— Aucun (document administratif général) —</option>
+                    <option th:each="e : ${evenements}" th:value="${e.id}" th:text="${e.titre} + (${e.edition} != null ? ' — ' + ${e.edition} : '')"></option>
+                </select>
+            </div>
+
+            <p class="text-muted small">Le document sera enregistré comme déposé par votre compte connecté.</p>
+
+            <div class="d-flex justify-content-between">
+                <a href="/documents" class="btn btn-outline-secondary">← Annuler</a>
+                <button type="submit" class="btn btn-primary px-4">
+                    <i class="fa-solid fa-upload"></i> Uploader
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

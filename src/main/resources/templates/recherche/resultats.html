@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Recherche')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container mt-4">
+    <h2 class="fw-bold mb-4">🔍 Recherche globale</h2>
+
+    <form action="/recherche" method="get" class="mb-4 d-flex gap-2" style="max-width:500px;">
+        <input type="text" name="q" th:value="${resultat.motCle}" class="form-control"
+               placeholder="Rechercher un membre, un document, un événement, une publication..."/>
+        <button type="submit" class="btn btn-primary">Rechercher</button>
+    </form>
+
+    <p class="text-muted" th:if="${resultat.motCle != null and !resultat.motCle.isBlank()}"
+       th:text="${resultat.getTotalResultats()} + ' résultat(s) pour \'' + ${resultat.motCle} + '\''"></p>
+
+    <div th:if="${resultat.motCle == null or resultat.motCle.isBlank()}" class="text-muted">
+        Saisissez un mot-clé pour lancer la recherche.
+    </div>
+
+    <div th:if="${resultat.motCle != null and !resultat.motCle.isBlank()}">
+
+        <div class="card p-3 mb-3" th:if="${!resultat.membres.isEmpty()}">
+            <h6 class="fw-bold mb-2">👤 Membres (<span th:text="${resultat.membres.size()}"></span>)</h6>
+            <ul class="mb-0">
+                <li th:each="m : ${resultat.membres}">
+                    <a th:href="@{/membres/{id}(id=${m.id})}" th:text="${m.prenom} + ' ' + ${m.nom}"></a>
+                    — <span class="text-muted" th:text="${m.email}"></span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="card p-3 mb-3" th:if="${!resultat.documents.isEmpty()}">
+            <h6 class="fw-bold mb-2">📄 Documents (<span th:text="${resultat.documents.size()}"></span>)</h6>
+            <ul class="mb-0">
+                <li th:each="d : ${resultat.documents}">
+                    <a th:href="@{/documents/telecharger/{id}(id=${d.id})}" th:text="${d.titre}"></a>
+                    — <span class="badge bg-secondary" th:text="${d.type}"></span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="card p-3 mb-3" th:if="${!resultat.evenements.isEmpty()}">
+            <h6 class="fw-bold mb-2">📅 Événements (<span th:text="${resultat.evenements.size()}"></span>)</h6>
+            <ul class="mb-0">
+                <li th:each="e : ${resultat.evenements}">
+                    <span th:text="${e.titre}"></span>
+                    — <span class="text-muted" th:text="${e.dateDebut}"></span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="card p-3 mb-3" th:if="${!resultat.publications.isEmpty()}">
+            <h6 class="fw-bold mb-2">📚 Publications (<span th:text="${resultat.publications.size()}"></span>)</h6>
+            <ul class="mb-0">
+                <li th:each="p : ${resultat.publications}">
+                    <span th:text="${p.titre}"></span>
+                    — <span class="text-muted" th:text="${p.annee}"></span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="text-muted text-center py-4" th:if="${resultat.getTotalResultats() == 0}">
+            Aucun résultat trouvé pour cette recherche.
+        </div>
+
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Nouvelle réunion')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container mt-4" style="max-width: 700px;">
+    <h2 class="fw-bold mb-4">🗓️ Nouvelle réunion</h2>
+
+    <div class="card p-4">
+        <form th:action="@{/reunions/enregistrer}" th:object="${reunion}" method="post">
+
+            <div class="mb-3">
+                <label class="form-label">Titre</label>
+                <input type="text" class="form-control" th:field="*{titre}" required/>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col">
+                    <label class="form-label">Date</label>
+                    <input type="date" class="form-control" th:field="*{dateReunion}" required/>
+                </div>
+                <div class="col">
+                    <label class="form-label">Heure</label>
+                    <input type="time" class="form-control" th:field="*{heureReunion}"/>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Équipe concernée (optionnel)</label>
+                <select class="form-select" th:field="*{equipe}">
+                    <option value="">— Réunion générale du laboratoire —</option>
+                    <option th:each="e : ${equipes}" th:value="${e.id}" th:text="${e.nom}"></option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Ordre du jour</label>
+                <textarea class="form-control" th:field="*{ordreDuJour}" rows="5" required></textarea>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label">Participants</label>
+                <div class="border rounded p-3" style="max-height:220px; overflow-y:auto;">
+                    <div class="form-check" th:each="m : ${membres}">
+                        <input class="form-check-input" type="checkbox" name="participantIds"
+                               th:value="${m.id}" th:id="'p-' + ${m.id}"/>
+                        <label class="form-check-label" th:for="'p-' + ${m.id}" th:text="${m.prenom} + ' ' + ${m.nom}"></label>
+                    </div>
+                </div>
+            </div>
+
+            <p class="text-muted small">Le PV pourra être uploadé après la tenue de la réunion, depuis sa page de détail.</p>
+
+            <div class="d-flex justify-content-between">
+                <a href="/reunions" class="btn btn-outline-secondary">← Annuler</a>
+                <button type="submit" class="btn btn-primary px-4">Créer la réunion</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

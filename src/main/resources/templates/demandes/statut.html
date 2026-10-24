@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Suivre ma demande')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: navbar}"></header>
+
+<main class="container">
+    <div class="page-narrow">
+        <p class="eyebrow">Candidature</p>
+        <h1 class="serif" style="font-size:1.9rem; margin-bottom:1.5rem;">Suivre ma demande</h1>
+
+        <div class="panel" style="margin-bottom:1.5rem;">
+            <form th:action="@{/demandes/statut}" method="post" style="display:flex; gap:.75rem;">
+                <input type="email" name="email" th:value="${email}" placeholder="Votre email" required style="flex:1;"/>
+                <button type="submit" class="btn-ink">Vérifier</button>
+            </form>
+        </div>
+
+        <div class="notice notice-error" th:if="${erreur}" th:text="${erreur}"></div>
+
+        <div class="panel" th:if="${demande != null}">
+            <dl class="fact-list">
+                <div class="fact-row"><dt>Nom</dt><dd th:text="${demande.nom} + ' ' + ${demande.prenom}"></dd></div>
+                <div class="fact-row"><dt>Email</dt><dd th:text="${demande.email}"></dd></div>
+                <div class="fact-row"><dt>Soumise le</dt><dd th:text="${demande.dateSoumission}"></dd></div>
+                <div class="fact-row" style="border-bottom:none;">
+                    <dt>Statut</dt>
+                    <dd>
+                        <span class="tag tag-brass" th:if="${demande.statut.name() == 'EN_ATTENTE'}">En attente</span>
+                        <span class="tag tag-teal" th:if="${demande.statut.name() == 'ACCEPTEE'}">Acceptée</span>
+                        <span class="tag tag-clay" th:if="${demande.statut.name() == 'REFUSEE'}">Refusée</span>
+                    </dd>
+                </div>
+            </dl>
+        </div>
+
+        <a href="/" class="btn-outline-ink" style="margin-top:2rem; display:inline-block;">Retour à l'accueil</a>
+    </div>
+</main>
+</body>
+</html>

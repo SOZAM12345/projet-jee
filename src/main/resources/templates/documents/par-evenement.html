@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Documents evenement')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container mt-4">
+    <h2 class="fw-bold mb-1">Documents — <span th:text="${evenement.titre}"></span></h2>
+    <p class="text-muted" th:text="${evenement.edition}"></p>
+
+    <div class="card p-3 mb-4">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr><th>Titre</th><th>Type</th><th>Date</th><th class="text-end">Actions</th></tr>
+            </thead>
+            <tbody>
+                <tr th:each="doc : ${documents}">
+                    <td th:text="${doc.titre}"></td>
+                    <td><span class="badge bg-secondary" th:text="${doc.type}"></span></td>
+                    <td th:text="${#temporals.format(doc.dateUpload, 'dd/MM/yyyy')}"></td>
+                    <td class="text-end">
+                        <a th:href="@{/documents/telecharger/{id}(id=${doc.id})}" class="btn btn-sm btn-outline-primary">
+                            <i class="fa-solid fa-download"></i>
+                        </a>
+                    </td>
+                </tr>
+                <tr th:if="${documents.isEmpty()}">
+                    <td colspan="4" class="text-center text-muted py-4">Aucun document pour cet événement</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <a href="/evenements" class="btn btn-outline-secondary">← Retour aux événements</a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Partenaires')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-dark">🤝 Partenaires</h2>
+        <a href="/partenaires/ajouter" class="btn btn-primary">
+            <i class="fa-solid fa-plus"></i> Ajouter un partenaire
+        </a>
+    </div>
+
+    <p><a href="/conventions">→ Voir les conventions</a></p>
+
+    <div class="card p-3 mb-4">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Type</th>
+                    <th>Pays</th>
+                    <th>Contact</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="p : ${partenairesActifs}">
+                    <td><a th:href="@{/partenaires/{id}(id=${p.id})}" th:text="${p.nom}"></a></td>
+                    <td th:text="${p.typeOrganisme}"></td>
+                    <td th:text="${p.pays}"></td>
+                    <td th:text="${p.contactEmail}"></td>
+                    <td class="text-end">
+                        <form th:action="@{/partenaires/archiver/{id}(id=${p.id})}" method="post" style="display:inline">
+                            <button type="submit" class="btn btn-sm btn-outline-danger"
+                                    onclick="return confirm('Archiver ce partenaire ?')">
+                                <i class="fa-solid fa-box-archive"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                <tr th:if="${partenairesActifs.isEmpty()}">
+                    <td colspan="5" class="text-center text-muted py-4">Aucun partenaire enregistré</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h4 class="fw-bold">📦 Archivés</h4>
+    <div class="card p-3">
+        <table class="table table-sm align-middle mb-0">
+            <thead><tr><th>Nom</th><th class="text-end">Actions</th></tr></thead>
+            <tbody>
+                <tr th:each="p : ${partenairesArchives}">
+                    <td th:text="${p.nom}"></td>
+                    <td class="text-end">
+                        <form th:action="@{/partenaires/desarchiver/{id}(id=${p.id})}" method="post">
+                            <button type="submit" class="btn btn-sm btn-outline-success">
+                                <i class="fa-solid fa-rotate-left"></i> Restaurer
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                <tr th:if="${partenairesArchives.isEmpty()}">
+                    <td colspan="2" class="text-center text-muted py-3">Aucun partenaire archivé</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

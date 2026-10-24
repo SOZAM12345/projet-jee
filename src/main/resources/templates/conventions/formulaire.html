@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Ajouter une convention')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container mt-4" style="max-width: 650px;">
+    <h2 class="fw-bold mb-4">📜 Créer une convention</h2>
+
+    <div class="card p-4">
+        <form th:action="@{/conventions/enregistrer}" th:object="${convention}" method="post">
+
+            <div class="mb-3">
+                <label class="form-label">Titre</label>
+                <input type="text" class="form-control" th:field="*{titre}" required/>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Partenaire</label>
+                <select class="form-select" th:field="*{partenaire}" required>
+                    <option th:each="p : ${partenaires}" th:value="${p.id}" th:text="${p.nom}"></option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Objet de la convention</label>
+                <textarea class="form-control" rows="4" th:field="*{objet}" required></textarea>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col">
+                    <label class="form-label">Date de signature</label>
+                    <input type="date" class="form-control" th:field="*{dateSignature}" required/>
+                </div>
+                <div class="col">
+                    <label class="form-label">Date de fin (laisser vide si indéterminée)</label>
+                    <input type="date" class="form-control" th:field="*{dateFin}"/>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-between">
+                <a href="/conventions" class="btn btn-outline-secondary">← Annuler</a>
+                <button type="submit" class="btn btn-primary px-4">
+                    <i class="fa-solid fa-floppy-disk"></i> Créer
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

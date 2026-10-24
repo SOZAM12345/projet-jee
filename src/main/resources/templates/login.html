@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Connexion')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: navbar}"></header>
+
+<main class="container">
+    <div class="auth-wrap">
+        <div class="panel auth-card">
+            <p class="eyebrow">Laboratoire LIAS</p>
+            <h1 class="serif" style="font-size:1.6rem; margin-bottom:1.5rem;">Connexion</h1>
+
+            <form th:action="@{/login}" method="post">
+                <div class="field">
+                    <label>Email</label>
+                    <input type="text" name="username" required autofocus/>
+                </div>
+                <div class="field">
+                    <label>Mot de passe</label>
+                    <input type="password" name="password" required/>
+                </div>
+
+                <div class="notice notice-error" th:if="${param.error}">
+                    Email ou mot de passe incorrect, ou compte désactivé/gelé.
+                </div>
+                <div class="notice notice-success" th:if="${param.logout}">
+                    Vous avez été déconnecté.
+                </div>
+
+                <button type="submit" class="btn-ink" style="width:100%;">Se connecter</button>
+            </form>
+
+            <div class="auth-links">
+                <p>Pas encore membre du laboratoire ?</p>
+                <a th:href="@{/demandes/soumettre}">Soumettre une demande d'adhésion</a>
+                <a th:href="@{/demandes/statut}">Suivre ma demande</a>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

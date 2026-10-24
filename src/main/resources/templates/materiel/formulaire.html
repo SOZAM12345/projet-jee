@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Nouvel arrivage')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container mt-4" style="max-width: 650px;">
+    <h2 class="fw-bold mb-4">📦 Nouvel arrivage de matériel</h2>
+
+    <div class="card p-4">
+        <form th:action="@{/materiel/enregistrer}" th:object="${materiel}" method="post">
+
+            <div class="mb-3">
+                <label class="form-label">Nom du matériel</label>
+                <input type="text" class="form-control" th:field="*{nom}" required/>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Description</label>
+                <textarea class="form-control" rows="3" th:field="*{description}"></textarea>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col">
+                    <label class="form-label">Date d'arrivée</label>
+                    <input type="date" class="form-control" th:field="*{dateArrivee}" required/>
+                </div>
+                <div class="col">
+                    <label class="form-label">Quantité totale reçue</label>
+                    <input type="number" class="form-control" th:field="*{quantiteTotale}" min="1" required/>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-between">
+                <a href="/materiel" class="btn btn-outline-secondary">← Annuler</a>
+                <button type="submit" class="btn btn-primary px-4">Enregistrer</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

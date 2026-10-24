@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Demande de matériel')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container mt-4" style="max-width: 650px;">
+    <h2 class="fw-bold mb-4">🧾 Soumettre une demande de matériel</h2>
+
+    <div class="card p-4">
+        <form th:action="@{/demandes-materiel/enregistrer}" th:object="${demande}" method="post">
+
+            <div class="mb-3">
+                <label class="form-label">Désignation du matériel</label>
+                <input type="text" class="form-control" th:field="*{designation}" placeholder="Ex: ordinateur portable, imprimante..." required/>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Quantité souhaitée</label>
+                <input type="number" class="form-control" th:field="*{quantiteSouhaitee}" min="1" required/>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label">Motif de la demande</label>
+                <textarea class="form-control" rows="4" th:field="*{motif}" required></textarea>
+            </div>
+
+            <div class="d-flex justify-content-between">
+                <a href="/demandes-materiel/mes-demandes" class="btn btn-outline-secondary">← Annuler</a>
+                <button type="submit" class="btn btn-primary px-4">Soumettre la demande</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

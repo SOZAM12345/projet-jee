@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Mes demandes de matériel')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container mt-4" style="max-width: 900px;">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold">🧾 Mes demandes de matériel</h2>
+        <a href="/demandes-materiel/soumettre" class="btn btn-primary">
+            <i class="fa-solid fa-plus"></i> Nouvelle demande
+        </a>
+    </div>
+
+    <div class="card p-3">
+        <table class="table align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>Désignation</th>
+                    <th>Quantité</th>
+                    <th>Statut</th>
+                    <th>Soumise le</th>
+                    <th>Décidée le</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="d : ${demandes}">
+                    <td th:text="${d.designation}"></td>
+                    <td th:text="${d.quantiteSouhaitee}"></td>
+                    <td>
+                        <span class="badge bg-warning text-dark" th:if="${d.statut.name() == 'EN_ATTENTE'}">En attente</span>
+                        <span class="badge bg-success" th:if="${d.statut.name() == 'VALIDEE'}">Validée</span>
+                        <span class="badge bg-danger" th:if="${d.statut.name() == 'REFUSEE'}">Refusée</span>
+                    </td>
+                    <td th:text="${#temporals.format(d.dateSoumission, 'dd/MM/yyyy')}"></td>
+                    <td th:text="${d.dateDecision != null} ? ${#temporals.format(d.dateDecision, 'dd/MM/yyyy')} : '—'"></td>
+                </tr>
+                <tr th:if="${demandes.isEmpty()}">
+                    <td colspan="5" class="text-center text-muted py-4">Vous n'avez encore fait aucune demande</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <a href="/dashboard" class="btn btn-outline-secondary mt-4">← Retour au tableau de bord</a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

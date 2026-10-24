@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Demande adhesion')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: navbar}"></header>
+
+<main class="container">
+    <div class="page-narrow">
+        <p class="eyebrow">Candidature</p>
+        <h1 class="serif" style="font-size:2rem; margin-bottom:.75rem;">Rejoindre le laboratoire LIAS</h1>
+        <p style="color:var(--ink-soft); max-width:60ch; margin-bottom:2rem;">
+            Décrivez votre profil et votre motivation. Le directeur en mandat examine chaque
+            candidature et vous informe de sa décision.
+        </p>
+
+        <div class="panel">
+            <form th:action="@{/demandes/enregistrer}" th:object="${demande}" method="post" enctype="multipart/form-data">
+
+                <p class="form-section-title">Identité</p>
+                <div class="field">
+                    <label>Nom</label>
+                    <input type="text" th:field="*{nom}" required/>
+                </div>
+                <div class="field">
+                    <label>Prénom</label>
+                    <input type="text" th:field="*{prenom}" required/>
+                </div>
+                <div class="field">
+                    <label>Email</label>
+                    <input type="email" th:field="*{email}" required/>
+                </div>
+
+                <p class="form-section-title">Motivation</p>
+                <div class="field">
+                    <textarea rows="5" th:field="*{motivation}" placeholder="Pourquoi souhaitez-vous rejoindre le laboratoire ?" required></textarea>
+                </div>
+
+                <p class="form-section-title">Document</p>
+                <div class="field">
+                    <label>CV (PDF)</label>
+                    <input type="file" name="cv" accept=".pdf" required/>
+                </div>
+
+                <div class="form-actions">
+                    <a href="/" class="btn-outline-ink">Annuler</a>
+                    <button type="submit" class="btn-brass">Envoyer ma candidature</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+</body>
+</html>

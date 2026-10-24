@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Ajouter un mandat')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: navbar}"></header>
+
+<main class="container">
+    <div class="page-narrow">
+        <p class="eyebrow">Gouvernance</p>
+        <h1 class="serif" style="font-size:2rem; margin-bottom:1.5rem;">Ajouter un mandat</h1>
+
+        <div class="panel">
+            <form th:action="@{/mandats/enregistrer}" th:object="${mandat}" method="post">
+
+                <div class="field">
+                    <label>Type de rôle</label>
+                    <select th:field="*{typeRole}" id="typeRole" required onchange="toggleEquipe()">
+                        <option value="DIRECTEUR">Directeur</option>
+                        <option value="VICE_DIRECTEUR">Vice-directeur</option>
+                        <option value="CHEF_EQUIPE">Chef d'équipe</option>
+                        <option value="MEMBRE_EQUIPE">Membre d'équipe</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label>Membre</label>
+                    <select th:field="*{membre}" required>
+                        <option th:each="m : ${membres}" th:value="${m.id}" th:text="${m.prenom} + ' ' + ${m.nom}"></option>
+                    </select>
+                </div>
+
+                <div class="field" id="champEquipe">
+                    <label>Équipe</label>
+                    <select th:field="*{equipe}">
+                        <option value="">— Aucune —</option>
+                        <option th:each="e : ${equipes}" th:value="${e.id}" th:text="${e.nom}"></option>
+                    </select>
+                    <p style="font-size:.8rem; color:var(--ink-faint); margin-top:.4rem;">
+                        Requis uniquement pour Chef d'équipe et Membre d'équipe.
+                    </p>
+                </div>
+
+                <div class="field">
+                    <label>Date de début</label>
+                    <input type="date" name="dateDebutStr"/>
+                    <p style="font-size:.8rem; color:var(--ink-faint); margin-top:.4rem;">
+                        Laisser vide pour utiliser la date d'aujourd'hui.
+                    </p>
+                </div>
+
+                <div class="field">
+                    <label>Date de fin (optionnel)</label>
+                    <input type="date" name="dateFinStr"/>
+                    <p style="font-size:.8rem; color:var(--ink-faint); margin-top:.4rem;">
+                        À renseigner uniquement pour saisir un mandat déjà terminé (historique). Laisser vide pour un mandat en cours.
+                    </p>
+                </div>
+
+                <div class="form-actions">
+                    <a href="/mandats" class="btn-outline-ink">Annuler</a>
+                    <button type="submit" class="btn-brass">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+
+<script>
+    function toggleEquipe() {
+        const type = document.getElementById('typeRole').value;
+        const champEquipe = document.getElementById('champEquipe');
+        const necessiteEquipe = (type === 'CHEF_EQUIPE' || type === 'MEMBRE_EQUIPE');
+        champEquipe.style.display = necessiteEquipe ? 'block' : 'none';
+        if (!necessiteEquipe) {
+            champEquipe.querySelector('select').value = '';
+        }
+    }
+    document.addEventListener('DOMContentLoaded', toggleEquipe);
+</script>
+</body>
+</html>

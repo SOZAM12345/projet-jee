@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Administration — Maintenance')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container mt-4">
+    <div th:replace="~{fragments/admin-nav :: nav(${section})}"></div>
+
+    <h2 class="fw-bold mb-4">⚙️ État du système</h2>
+
+    <div class="row g-3">
+        <div class="col-md-3">
+            <div class="card p-3 text-center">
+                <div class="fs-2 fw-bold" th:text="${nbMembres}"></div>
+                <div class="text-muted">Membres</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card p-3 text-center">
+                <div class="fs-2 fw-bold" th:text="${nbPublications}"></div>
+                <div class="text-muted">Publications</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card p-3 text-center">
+                <div class="fs-2 fw-bold" th:text="${nbEvenements}"></div>
+                <div class="text-muted">Événements</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card p-3 text-center">
+                <div class="fs-2 fw-bold" th:text="${nbDocuments}"></div>
+                <div class="text-muted">Documents</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card p-3 text-center">
+                <div class="fs-2 fw-bold" th:text="${nbReunions}"></div>
+                <div class="text-muted">Réunions</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

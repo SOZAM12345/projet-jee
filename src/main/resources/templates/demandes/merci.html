@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Merci')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: navbar}"></header>
+
+<main class="container">
+    <div class="page-narrow" style="text-align:center; padding-top:4rem;">
+        <p class="eyebrow">Confirmation</p>
+        <h1 class="serif" style="font-size:1.9rem; margin-bottom:1rem;">Candidature envoyée</h1>
+        <p style="color:var(--ink-soft); max-width:48ch; margin:0 auto 2rem;">
+            Votre demande d'adhésion a été enregistrée. Le directeur en mandat va l'examiner ;
+            vous pourrez suivre l'état de votre candidature à tout moment.
+        </p>
+        <div style="display:flex; justify-content:center; gap:1rem;">
+            <a href="/demandes/statut" class="btn-outline-ink">Suivre ma demande</a>
+            <a href="/" class="btn-ink">Retour à l'accueil</a>
+        </div>
+    </div>
+</main>
+</body>
+</html>

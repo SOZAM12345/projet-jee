@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Matériel')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-dark">📦 Gestion du matériel</h2>
+        <a href="/materiel/ajouter" class="btn btn-primary">
+            <i class="fa-solid fa-plus"></i> Nouvel arrivage
+        </a>
+    </div>
+
+    <div class="card p-3 mb-4">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Date d'arrivée</th>
+                    <th>Quantité totale</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="m : ${materielsActifs}">
+                    <td><a th:href="@{/materiel/{id}(id=${m.id})}" th:text="${m.nom}"></a></td>
+                    <td th:text="${m.dateArrivee}"></td>
+                    <td th:text="${m.quantiteTotale}"></td>
+                    <td class="text-end">
+                        <div class="d-flex gap-1 justify-content-end">
+                            <a th:href="@{/materiel/{id}(id=${m.id})}" class="btn btn-sm btn-outline-primary">Voir</a>
+                            <form th:action="@{/materiel/archiver/{id}(id=${m.id})}" method="post">
+                                <button type="submit" class="btn btn-sm btn-outline-danger"
+                                        onclick="return confirm('Archiver ce matériel ?')">
+                                    <i class="fa-solid fa-box-archive"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                <tr th:if="${materielsActifs.isEmpty()}">
+                    <td colspan="4" class="text-center text-muted py-4">Aucun matériel enregistré</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h4 class="fw-bold">📦 Archivé</h4>
+    <div class="card p-3">
+        <table class="table table-sm align-middle mb-0">
+            <thead><tr><th>Nom</th><th>Date</th><th class="text-end">Actions</th></tr></thead>
+            <tbody>
+                <tr th:each="m : ${materielsArchives}">
+                    <td th:text="${m.nom}"></td>
+                    <td th:text="${m.dateArrivee}"></td>
+                    <td class="text-end">
+                        <form th:action="@{/materiel/desarchiver/{id}(id=${m.id})}" method="post">
+                            <button type="submit" class="btn btn-sm btn-outline-success">Restaurer</button>
+                        </form>
+                    </td>
+                </tr>
+                <tr th:if="${materielsArchives.isEmpty()}">
+                    <td colspan="3" class="text-center text-muted py-3">Aucun matériel archivé</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

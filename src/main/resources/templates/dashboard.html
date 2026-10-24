@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head('Tableau de bord')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: navbar}"></header>
+
+<main class="container">
+    <div class="page-narrow" style="max-width:820px;">
+
+        <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:2rem; flex-wrap:wrap; gap:1rem;">
+            <div>
+                <p class="eyebrow">Espace membre</p>
+                <h1 class="serif" style="font-size:2rem; margin-bottom:.5rem;" th:text="${membre.prenom} + ' ' + ${membre.nom}"></h1>
+                <div style="display:flex; gap:.5rem; flex-wrap:wrap;">
+                    <span class="tag tag-ink" th:text="${membre.statut}"></span>
+                    <span class="tag tag-brass" th:if="${estDirecteur}">Directeur en mandat</span>
+                    <span class="tag tag-brass" th:if="${estViceDirecteur}">Vice-directeur</span>
+                    <span class="tag tag-brass" th:if="${estChefEquipe}">Chef d'équipe</span>
+                </div>
+            </div>
+        </div>
+
+        <section class="panel" style="border-left:3px solid var(--brass); margin-bottom:1.5rem;" th:if="${estDirecteur}">
+            <p class="section-title">Direction du laboratoire</p>
+            <div class="toc" style="border-top:none;">
+                <div class="toc-row">
+                    <div>
+                        <p class="toc-row__title" style="font-size:1.05rem;">Demandes d'adhésion</p>
+                        <p class="toc-row__desc" th:text="${demandesEnAttente.size()} + ' en attente de décision'"></p>
+                    </div>
+                    <a href="/demandes" class="toc-row__link">Traiter</a>
+                </div>
+                <div class="toc-row">
+                    <div>
+                        <p class="toc-row__title" style="font-size:1.05rem;">Mandats</p>
+                        <p class="toc-row__desc">Gestion de la gouvernance et des responsabilités d'équipe.</p>
+                    </div>
+                    <a href="/mandats" class="toc-row__link">Gérer</a>
+                </div>
+                <div class="toc-row" style="border-bottom:none;">
+                    <div>
+                        <p class="toc-row__title" style="font-size:1.05rem;">Rapport annuel</p>
+                        <p class="toc-row__desc">Génération du bilan d'activité du laboratoire.</p>
+                    </div>
+                    <a href="/rapport-annuel" class="toc-row__link">Générer</a>
+                </div>
+            </div>
+        </section>
+
+        <div class="toc">
+            <div class="toc-row">
+                <div>
+                    <p class="toc-row__title">Mon profil</p>
+                    <p class="toc-row__desc">Informations personnelles, biographie et équipe actuelle.</p>
+                </div>
+                <a th:href="@{'/membres/' + ${membre.id}}" class="toc-row__link">Ouvrir</a>
+            </div>
+
+            <div class="toc-row" sec:authorize="hasAnyRole('PERMANENT','DIRECTEUR','VICE_DIRECTEUR','CHEF_EQUIPE','MEMBRE_EQUIPE')">
+                <div>
+                    <p class="toc-row__title">Membres &amp; mandats</p>
+                    <p class="toc-row__desc">Gestion des membres du laboratoire et des mandats de gouvernance.</p>
+                </div>
+                <span style="display:flex; gap:1rem;">
+                    <a href="/membres" class="toc-row__link">Membres</a>
+                    <a href="/mandats" class="toc-row__link">Mandats</a>
+                </span>
+            </div>
+
+            <!-- Section 10 : Archivage documentaire -->
+            <div class="toc-row" sec:authorize="hasAnyRole('PERMANENT','DIRECTEUR','VICE_DIRECTEUR','CHEF_EQUIPE','MEMBRE_EQUIPE')">
+                <div>
+                    <p class="toc-row__title">Documents</p>
+                    <p class="toc-row__desc">Archivage documentaire : programmes, rapports, attestations, PV.</p>
+                </div>
+                <span style="display:flex; gap:1rem;">
+                    <a href="/documents" class="toc-row__link">Consulter</a>
+                    <a href="/documents/ajouter" class="toc-row__link">Ajouter</a>
+                </span>
+            </div>
+
+            <!-- Section 17 : Réunions et procès-verbaux -->
+            <div class="toc-row" sec:authorize="hasAnyRole('PERMANENT','DIRECTEUR','VICE_DIRECTEUR','CHEF_EQUIPE','MEMBRE_EQUIPE')">
+                <div>
+                    <p class="toc-row__title">Réunions</p>
+                    <p class="toc-row__desc">Ordres du jour et procès-verbaux des réunions.</p>
+                </div>
+                <span style="display:flex; gap:1rem;">
+                    <a href="/reunions" class="toc-row__link">Consulter</a>
+                    <a href="/reunions/ajouter" class="toc-row__link">Créer</a>
+                </span>
+            </div>
+
+            <!-- Section 16 : Conventions et collaborations -->
+            <div class="toc-row" sec:authorize="hasAnyRole('PERMANENT','DIRECTEUR','VICE_DIRECTEUR','CHEF_EQUIPE','MEMBRE_EQUIPE')">
+                <div>
+                    <p class="toc-row__title">Conventions &amp; partenaires</p>
+                    <p class="toc-row__desc">Gestion des partenariats et des conventions de collaboration.</p>
+                </div>
+                <span style="display:flex; gap:1rem;">
+                    <a href="/conventions" class="toc-row__link">Conventions</a>
+                    <a href="/partenaires" class="toc-row__link">Partenaires</a>
+                </span>
+            </div>
+
+            <!-- Section 14 : Gestion du matériel -->
+            <div class="toc-row" sec:authorize="hasAnyRole('PERMANENT','DIRECTEUR','VICE_DIRECTEUR','CHEF_EQUIPE','MEMBRE_EQUIPE')">
+                <div>
+                    <p class="toc-row__title">Matériel</p>
+                    <p class="toc-row__desc">Suivi des arrivages et distribution du matériel.</p>
+                </div>
+                <span style="display:flex; gap:1rem;">
+                    <a href="/materiel" class="toc-row__link">Consulter</a>
+                    <a href="/materiel/ajouter" class="toc-row__link">Ajouter</a>
+                </span>
+            </div>
+
+            <!-- Section 15 : Besoins en matériel (liste complète, membres internes) -->
+            <div class="toc-row" sec:authorize="hasAnyRole('PERMANENT','DIRECTEUR','VICE_DIRECTEUR','CHEF_EQUIPE','MEMBRE_EQUIPE')">
+                <div>
+                    <p class="toc-row__title">Besoins en matériel</p>
+                    <p class="toc-row__desc">Toutes les demandes en attente et leur validation.</p>
+                </div>
+                <a href="/demandes-materiel" class="toc-row__link">Consulter</a>
+            </div>
+
+            <!-- Sections 14 et 15 : Mon matériel et mes demandes — strictement modules internes (§2.2.C : "Aucun accès aux modules internes") -->
+            <div class="toc-row" sec:authorize="hasAnyRole('PERMANENT','DIRECTEUR','VICE_DIRECTEUR','CHEF_EQUIPE','MEMBRE_EQUIPE')">
+                <div>
+                    <p class="toc-row__title">Mes demandes de matériel</p>
+                    <p class="toc-row__desc">Matériel reçu, soumission d'une demande et suivi de son état.</p>
+                </div>
+                <span style="display:flex; gap:1rem;">
+                    <a href="/mon-materiel" class="toc-row__link">Mon matériel</a>
+                    <a href="/demandes-materiel/mes-demandes" class="toc-row__link">Mes demandes</a>
+                    <a href="/demandes-materiel/soumettre" class="toc-row__link">Soumettre</a>
+                </span>
+            </div>
+
+            <div class="toc-row">
+                <div>
+                    <p class="toc-row__title">Publications</p>
+                    <p class="toc-row__desc" th:if="${!mesPublications.isEmpty()}" th:text="${mesPublications.size()} + ' publication(s) enregistrée(s).'"></p>
+                    <p class="toc-row__desc" th:if="${mesPublications.isEmpty()}">Aucune publication enregistrée pour l'instant.</p>
+                </div>
+                <span style="display:flex; gap:1rem;">
+                    <a href="/publications" class="toc-row__link">Consulter</a>
+                    <a href="/publications/ajouter" class="toc-row__link">Ajouter</a>
+                </span>
+            </div>
+
+            <div class="toc-row" style="border-bottom:none;">
+                <div>
+                    <p class="toc-row__title">Événements</p>
+                    <p class="toc-row__desc" th:if="${!prochainsEvenements.isEmpty()}"
+                       th:text="${prochainsEvenements[0].titre} + ' — ' + ${prochainsEvenements[0].dateDebut}"></p>
+                    <p class="toc-row__desc" th:if="${prochainsEvenements.isEmpty()}">Aucun événement à venir pour le moment.</p>
+                </div>
+                <a href="/evenements" class="toc-row__link">Voir tout</a>
+            </div>
+        </div>
+
+        <div class="notice notice-info" th:if="${estDoctorant}" style="margin-top:2rem;">
+            En tant que doctorant, votre accès est limité à l'ajout et à la consultation de
+            publications — conformément au §2.2.C du cahier des charges.
+        </div>
+        <div class="notice notice-info" th:if="${estAssocie}" style="margin-top:2rem;">
+            En tant que membre associé, votre accès est limité à la consultation, à la
+            participation à certains événements

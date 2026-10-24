@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Detail partenaire')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container mt-4" style="max-width: 800px;">
+    <h2 class="fw-bold mb-1" th:text="${partenaire.nom}"></h2>
+    <p class="text-muted" th:text="${partenaire.typeOrganisme} + ' — ' + ${partenaire.pays}"></p>
+    <p th:text="${partenaire.description}"></p>
+    <p><strong>Contact :</strong> <span th:text="${partenaire.contactEmail}"></span></p>
+
+    <h5 class="fw-bold mt-4">Conventions avec ce partenaire</h5>
+    <div class="card p-3 mb-3">
+        <table class="table table-sm mb-0">
+            <thead><tr><th>Titre</th><th>Date signature</th><th>Statut</th></tr></thead>
+            <tbody>
+                <tr th:each="c : ${conventions}">
+                    <td><a th:href="@{/conventions/{id}(id=${c.id})}" th:text="${c.titre}"></a></td>
+                    <td th:text="${c.dateSignature}"></td>
+                    <td>
+                        <span th:if="${c.dateFin == null}" class="badge bg-success">En cours</span>
+                        <span th:unless="${c.dateFin == null}" th:text="${c.dateFin}"></span>
+                    </td>
+                </tr>
+                <tr th:if="${conventions.isEmpty()}">
+                    <td colspan="3" class="text-center text-muted py-3">Aucune convention</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <a href="/partenaires" class="btn btn-outline-secondary">← Retour aux partenaires</a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

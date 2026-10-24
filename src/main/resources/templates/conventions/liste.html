@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Conventions')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-dark">📜 Conventions & collaborations</h2>
+        <a href="/conventions/ajouter" class="btn btn-primary">
+            <i class="fa-solid fa-plus"></i> Créer une convention
+        </a>
+    </div>
+
+    <p><a href="/partenaires">→ Voir les partenaires</a></p>
+
+    <div class="card p-3 mb-4">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>Titre</th>
+                    <th>Partenaire</th>
+                    <th>Date signature</th>
+                    <th>Statut</th>
+                    <th>Document</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="c : ${conventionsActives}">
+                    <td><a th:href="@{/conventions/{id}(id=${c.id})}" th:text="${c.titre}"></a></td>
+                    <td th:text="${c.partenaire.nom}"></td>
+                    <td th:text="${c.dateSignature}"></td>
+                    <td>
+                        <span th:if="${c.dateFin == null}" class="badge bg-success">En cours</span>
+                        <span th:unless="${c.dateFin == null}" th:text="${c.dateFin}"></span>
+                    </td>
+                    <td>
+                        <span th:if="${c.cheminDocument != null}" class="badge bg-success">Disponible</span>
+                        <span th:if="${c.cheminDocument == null}" class="badge bg-secondary">Aucun</span>
+                    </td>
+                    <td class="text-end">
+                        <form th:action="@{/conventions/archiver/{id}(id=${c.id})}" method="post" style="display:inline">
+                            <button type="submit" class="btn btn-sm btn-outline-danger"
+                                    onclick="return confirm('Archiver cette convention ?')">
+                                <i class="fa-solid fa-box-archive"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                <tr th:if="${conventionsActives.isEmpty()}">
+                    <td colspan="6" class="text-center text-muted py-4">Aucune convention</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h4 class="fw-bold">📦 Archivées</h4>
+    <div class="card p-3">
+        <table class="table table-sm align-middle mb-0">
+            <thead><tr><th>Titre</th><th>Partenaire</th><th class="text-end">Actions</th></tr></thead>
+            <tbody>
+                <tr th:each="c : ${conventionsArchivees}">
+                    <td th:text="${c.titre}"></td>
+                    <td th:text="${c.partenaire.nom}"></td>
+                    <td class="text-end">
+                        <form th:action="@{/conventions/desarchiver/{id}(id=${c.id})}" method="post">
+                            <button type="submit" class="btn btn-sm btn-outline-success">
+                                <i class="fa-solid fa-rotate-left"></i> Restaurer
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                <tr th:if="${conventionsArchivees.isEmpty()}">
+                    <td colspan="3" class="text-center text-muted py-3">Aucune convention archivée</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

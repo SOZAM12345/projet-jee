@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head('Equipes')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-dark">🧩 Équipes du laboratoire</h2>
+        <a href="/equipes/ajouter" class="btn btn-primary"
+           sec:authorize="hasAnyRole('PERMANENT','DIRECTEUR','VICE_DIRECTEUR','CHEF_EQUIPE','MEMBRE_EQUIPE')">
+            <i class="fa-solid fa-plus"></i> Ajouter une équipe
+        </a>
+    </div>
+
+    <div class="card p-3 mb-4">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Description</th>
+                    <th>Nombre de membres</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="equipe : ${equipesActives}">
+                    <td th:text="${equipe.nom}"></td>
+                    <td th:text="${equipe.description}"></td>
+                    <td><span class="badge bg-info text-dark" th:text="${equipe.membres.size()}"></span></td>
+                    <td class="text-end">
+                        <a th:href="@{/equipes/{id}(id=${equipe.id})}" class="btn btn-sm btn-outline-primary">
+                            <i class="fa-solid fa-eye"></i>
+                        </a>
+                        <form th:action="@{/equipes/archiver/{id}(id=${equipe.id})}" method="post" style="display:inline"
+                              sec:authorize="hasAnyRole('PERMANENT','DIRECTEUR','VICE_DIRECTEUR','CHEF_EQUIPE','MEMBRE_EQUIPE')">
+                            <button type="submit" class="btn btn-sm btn-outline-danger"
+                                    onclick="return confirm('Archiver cette équipe ? Ses membres et son historique resteront intacts.')">
+                                <i class="fa-solid fa-box-archive"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                <tr th:if="${equipesActives.isEmpty()}">
+                    <td colspan="4" class="text-center text-muted py-4">Aucune équipe active</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h4 class="fw-bold">📦 Équipes archivées</h4>
+    <div class="card p-3">
+        <table class="table table-sm align-middle mb-0">
+            <thead>
+                <tr><th>Nom</th><th>Nombre de membres</th><th class="text-end">Actions</th></tr>
+            </thead>
+            <tbody>
+                <tr th:each="equipe : ${equipesArchivees}">
+                    <td th:text="${equipe.nom}"></td>
+                    <td><span class="badge bg-secondary" th:text="${equipe.membres.size()}"></span></td>
+                    <td class="text-end">
+                        <a th:href="@{/equipes/{id}(id=${equipe.id})}" class="btn btn-sm btn-outline-primary">
+                            <i class="fa-solid fa-eye"></i>
+                        </a>
+                        <form th:action="@{/equipes/desarchiver/{id}(id=${equipe.id})}" method="post" style="display:inline"
+                              sec:authorize="hasAnyRole('PERMANENT','DIRECTEUR','VICE_DIRECTEUR','CHEF_EQUIPE','MEMBRE_EQUIPE')">
+                            <button type="submit" class="btn btn-sm btn-outline-success">
+                                <i class="fa-solid fa-rotate-left"></i> Restaurer
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                <tr th:if="${equipesArchivees.isEmpty()}">
+                    <td colspan="3" class="text-center text-muted py-3">Aucune équipe archivée</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

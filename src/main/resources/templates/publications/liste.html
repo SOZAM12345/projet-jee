@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head('Publications')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-dark">📚 Publications du laboratoire</h2>
+        <a href="/publications/ajouter" class="btn btn-primary" sec:authorize="isAuthenticated()">
+            <i class="fa-solid fa-plus"></i> Ajouter une publication
+        </a>
+    </div>
+
+    <div class="card p-3 mb-3">
+        <form method="get" action="/publications" class="row g-2">
+            <div class="col-md-4">
+                <select name="auteurId" class="form-select">
+                    <option value="">Tous les auteurs</option>
+                    <option th:each="m : ${membres}" th:value="${m.id}"
+                            th:selected="${m.id == auteurId}"
+                            th:text="${m.nom} + ' ' + ${m.prenom}"></option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <input type="number" name="annee" th:value="${annee}" class="form-control" placeholder="Année"/>
+            </div>
+            <div class="col-md-3">
+                <select name="equipeId" class="form-select">
+                    <option value="">Toutes les équipes</option>
+                    <option th:each="e : ${equipes}" th:value="${e.id}"
+                            th:selected="${e.id == equipeId}"
+                            th:text="${e.nom}"></option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-outline-primary w-100">
+                    <i class="fa-solid fa-magnifying-glass"></i> Filtrer
+                </button>
+            </div>
+        </form>
+        <a href="/publications" class="small mt-2 d-inline-block">Réinitialiser les filtres</a>
+    </div>
+
+    <div class="card p-3 mb-4">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>Titre</th>
+                    <th>Auteur(s)</th>
+                    <th>Année</th>
+                    <th>Équipe</th>
+                    <th>Lien</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="publication : ${publicationsActives}">
+                    <td th:text="${publication.titre}"></td>
+                    <td>
+                        <span th:each="a, iter : ${publication.auteurs}">
+                            <span th:text="${a.nom} + ' ' + ${a.prenom}"></span><span th:if="${!iter.last}">, </span>
+                        </span>
+                    </td>
+                    <td><span class="badge bg-secondary" th:text="${publication.annee}"></span></td>
+                    <td th:text="${publication.equipe != null ? publication.equipe.nom : '—'}"></td>
+                    <td>
+                        <a th:if="${publication.lien != null and !publication.lien.isEmpty()}"
+                           th:href="${publication.lien}" target="_blank" class="btn btn-sm btn-outline-primary">
+                            <i class="fa-solid fa-link"></i>
+                        </a>
+                    </td>
+                    <td class="text-end">
+                        <form th:action="@{/publications/archiver/{id}(id=${publication.id})}" method="post" style="display:inline"
+                              sec:authorize="hasAnyRole('PERMANENT','DIRECTEUR','VICE_DIRECTEUR','CHEF_EQUIPE','MEMBRE_EQUIPE')">
+                            <button type="submit" class="btn btn-sm btn-outline-danger"
+                                    onclick="return confirm('Archiver cette publication ?')">
+                                <i class="fa-solid fa-box-archive"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                <tr th:if="${publicationsActives.isEmpty()}">
+                    <td colspan="6" class="text-center text-muted py-4">Aucune publication trouvée</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h4 class="fw-bold">📦 Archivées</h4>
+    <div class="card p-3">
+        <table class="table table-sm align-middle mb-0">
+            <thead><tr><th>Titre</th><th>Année</th><th class="text-end">Actions</th></tr></thead>
+            <tbody>
+                <tr th:each="publication : ${publicationsArchivees}">
+                    <td th:text="${publication.titre}"></td>
+                    <td th:text="${publication.annee}"></td>
+                    <td class="text-end">
+                        <form th:action="@{/publications/desarchiver/{id}(id=${publication.id})}" method="post"
+                              sec:authorize="hasAnyRole('PERMANENT','DIRECTEUR','VICE_DIRECTEUR','CHEF_EQUIPE','MEMBRE_EQUIPE')">
+                            <button type="submit" class="btn btn-sm btn-outline-success">
+                                <i class="fa-solid fa-rotate-left"></i> Restaurer
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                <tr th:if="${publicationsArchivees.isEmpty()}">
+                    <td colspan="3" class="text-center text-muted py-3">Aucune publication archivée</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

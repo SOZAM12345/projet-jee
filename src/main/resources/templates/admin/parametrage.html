@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Administration — Paramétrage')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container mt-4" style="max-width: 550px;">
+    <div th:replace="~{fragments/admin-nav :: nav(${section})}"></div>
+
+    <h2 class="fw-bold mb-4">⚙️ Paramétrage du laboratoire</h2>
+
+    <div class="card p-4">
+        <form th:action="@{/admin/parametrage/enregistrer}" th:object="${parametres}" method="post">
+            <input type="hidden" th:field="*{id}"/>
+
+            <div class="mb-3">
+                <label class="form-label">Nom du laboratoire</label>
+                <input type="text" class="form-control" th:field="*{nomLaboratoire}" required/>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Établissement</label>
+                <input type="text" class="form-control" th:field="*{etablissement}"/>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label">Date de création du laboratoire</label>
+                <input type="date" class="form-control" th:field="*{dateCreation}"/>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Enregistrer</button>
+        </form>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

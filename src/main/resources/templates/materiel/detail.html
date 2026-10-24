@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Détail matériel')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container mt-4" style="max-width: 800px;">
+    <h2 class="fw-bold mb-1" th:text="${materiel.nom}"></h2>
+    <p class="text-muted" th:text="'Arrivé le ' + ${materiel.dateArrivee}"></p>
+
+    <div class="card p-4 mb-3">
+        <p th:text="${materiel.description}"></p>
+        <div class="d-flex gap-4 mt-2">
+            <div><strong>Quantité totale :</strong> <span th:text="${materiel.quantiteTotale}"></span></div>
+            <div><strong>Distribuée :</strong> <span th:text="${quantiteDistribuee}"></span></div>
+            <div><strong>Restante :</strong> <span th:text="${materiel.quantiteTotale - quantiteDistribuee}"></span></div>
+        </div>
+    </div>
+
+    <div class="card p-4 mb-3">
+        <h6 class="fw-bold mb-3">Distribuer</h6>
+        <form th:action="@{/materiel/{id}/distribuer(id=${materiel.id})}" method="post" class="d-flex gap-2">
+            <select name="membreId" class="form-select" required>
+                <option value="" disabled selected>— Choisir un membre —</option>
+                <option th:each="m : ${membres}" th:value="${m.id}" th:text="${m.prenom} + ' ' + ${m.nom}"></option>
+            </select>
+            <input type="number" name="quantite" class="form-control" min="1" style="max-width:120px" placeholder="Quantité" required/>
+            <button type="submit" class="btn btn-primary">Distribuer</button>
+        </form>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card p-3 mb-3">
+                <h6 class="fw-bold mb-2">Ont reçu</h6>
+                <table class="table table-sm mb-0">
+                    <thead><tr><th>Membre</th><th>Quantité</th><th>Date</th></tr></thead>
+                    <tbody>
+                        <tr th:each="d : ${distributions}">
+                            <td th:text="${d.membre.prenom} + ' ' + ${d.membre.nom}"></td>
+                            <td th:text="${d.quantite}"></td>
+                            <td th:text="${d.dateDistribution}"></td>
+                        </tr>
+                        <tr th:if="${distributions.isEmpty()}">
+                            <td colspan="3" class="text-center text-muted py-3">Aucune distribution</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card p-3 mb-3">
+                <h6 class="fw-bold mb-2">N'ont pas reçu</h6>
+                <ul class="mb-0">
+                    <li th:each="m : ${membresSansDistribution}" th:text="${m.prenom} + ' ' + ${m.nom}"></li>
+                </ul>
+                <p class="text-muted mb-0" th:if="${membresSansDistribution.isEmpty()}">Tous les membres ont reçu du matériel</p>
+            </div>
+        </div>
+    </div>
+
+    <a href="/materiel" class="btn btn-outline-secondary">← Retour au matériel</a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

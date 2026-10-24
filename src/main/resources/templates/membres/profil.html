@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head('Profil membre')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container mt-4" style="max-width: 700px;">
+    <div class="d-flex align-items-center gap-3 mb-3">
+        <img th:if="${membre.cheminPhoto != null}" th:src="@{'/uploads/photos/' + ${membre.cheminPhoto}}"
+             style="width:80px;height:80px;object-fit:cover;border-radius:50%;"/>
+        <div>
+            <h2 class="fw-bold mb-0" th:text="${membre.nom} + ' ' + ${membre.prenom}"></h2>
+            <span class="badge bg-info text-dark" th:text="${membre.statut}"></span>
+            <span th:if="${membre.actif}" class="badge bg-success">Actif</span>
+            <span th:unless="${membre.actif}" class="badge bg-secondary">Désactivé</span>
+        </div>
+    </div>
+
+    <div class="card p-4 mb-3">
+        <p><strong>Email :</strong> <span th:text="${membre.email}"></span></p>
+        <p><strong>Établissement d'origine :</strong> <span th:text="${membre.etablissementOrigine ?: '—'}"></span></p>
+        <p><strong>Laboratoire d'origine :</strong> <span th:text="${membre.laboratoireOrigine ?: '—'}"></span></p>
+        <p><strong>Équipe :</strong> <span th:text="${membre.equipe != null ? membre.equipe.nom : '—'}"></span></p>
+        <p><strong>Date d'embauche :</strong> <span th:text="${membre.dateEmbauche ?: '—'}"></span></p>
+        <p><strong>Date d'affiliation :</strong> <span th:text="${membre.dateAffiliation ?: '—'}"></span></p>
+        <p><strong>Biographie :</strong><br/><span th:text="${membre.biographie ?: '—'}"></span></p>
+        <p><strong>Centres d'intérêt :</strong><br/><span th:text="${membre.centresInteret ?: '—'}"></span></p>
+        <p class="text-muted small mb-0">🔒 Date de naissance : confidentielle, non affichée</p>
+    </div>
+
+    <div class="d-flex gap-2 mb-4 flex-wrap">
+        <a th:href="@{/membres/modifier/{id}(id=${membre.id})}" class="btn btn-primary">
+            <i class="fa-solid fa-pen"></i> Modifier le profil
+        </a>
+        <a th:href="@{/membres/{id}/historique(id=${membre.id})}" class="btn btn-outline-secondary">
+            <i class="fa-solid fa-clock-rotate-left"></i> Historique d'affiliation
+        </a>
+    </div>
+
+    <!-- Gouvernance : réservé au Directeur (§5.2, §8) -->
+    <div class="card p-3 mb-4 border-warning" sec:authorize="hasRole('DIRECTEUR')">
+        <h6 class="fw-bold mb-2">Gestion du statut</h6>
+        <div class="d-flex gap-2 flex-wrap">
+            <form th:if="${membre.actif} and ${membre.statut.name() != 'RETRAITE'} and ${membre.statut.name() != 'ANCIEN'}"
+                  th:action="@{/membres/retraite/{id}(id=${membre.id})}" method="post">
+                <button type="submit" class="btn btn-sm btn-outline-warning"
+                        onclick="return confirm('Mettre ce membre en retraite ? Son compte sera gelé.')">
+                    Mettre en retraite
+                </button>
+            </form>
+
+            <form th:if="${membre.actif}" th:action="@{/membres/desactiver/{id}(id=${membre.id})}" method="post">
+                <button type="submit" class="btn btn-sm btn-outline-danger"
+                        onclick="return confirm('Désactiver ce membre ? Son historique sera conservé.')">
+                    Désactiver (ancien membre)
+                </button>
+            </form>
+
+            <form th:unless="${membre.actif}" th:action="@{/membres/reactiver/{id}(id=${membre.id})}" method="post" class="d-flex gap-2">
+                <select name="nouveauStatut" class="form-select form-select-sm" style="width:130px">
+                    <option value="PERMANENT">Permanent</option>
+                    <option value="ASSOCIE">Associé</option>
+                    <option value="DOCTORANT">Doctorant</option>
+                </select>
+                <button type="submit" class="btn btn-sm btn-outline-success">Réactiver</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Section 3 : "Publications" parmi les informations du profil -->
+    <div class="card p-4 mb-3">
+        <h5 class="fw-bold mb-3">📚 Publications</h5>
+        <ul class="list-unstyled mb-0" th:if="${!publications.isEmpty()}">
+            <li th:each="p : ${publications}" class="mb-2">
+                <a th:if="${p.lien != null}" th:href="${p.lien}" target="_blank" th:text="${p.titre}"></a>
+                <span th:if="${p.lien == null}" th:text="${p.titre}"></span>
+                <span class="text-muted">(<span th:text="${p.annee}"></span>)</span>
+            </li>
+        </ul>
+        <p class="text-muted mb-0" th:if="${publications.isEmpty()}">Aucune publication enregistrée</p>
+    </div>
+
+    <h4 class="fw-bold">📝 Historique des modifications du profil</h4>
+    <div class="card p-3">
+        <table class="table table-sm mb-0">
+            <thead>
+                <tr><th>Date</th><th>Champ</th><th>Avant</th><th>Après</th></tr>
+            </thead>
+            <tbody>
+                <tr th:each="h : ${historique}">
+                    <td th:text="${h.dateModification}"></td>
+                    <td th:text="${h.champModifie}"></td>
+                    <td th:text="${h.ancienneValeur}"></td>
+                    <td th:text="${h.nouvelleValeur}"></td>
+                </tr>
+                <tr th:if="${historique.isEmpty()}">
+                    <td colspan="4" class="text-center text-muted py-3">Aucune modification enregistrée</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <a th:href="@{/membres}" class="btn btn-outline-secondary mt-4">← Retour aux membres</a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
